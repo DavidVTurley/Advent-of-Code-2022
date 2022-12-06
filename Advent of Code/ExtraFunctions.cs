@@ -2,7 +2,7 @@
 
 public static class ExtraFunctions
 {
-    public static async Task<string> MakeAdventOfCodeInputRequest(HttpClient client, Int32 day)
+    public static async Task<String> MakeAdventOfCodeInputRequest(HttpClient client, Int32 day)
     {
         HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"{day}/input");
         request.Headers.TryAddWithoutValidation("Cookie", "session=53616c7465645f5fbb1fcdcf1223961c690186431282a894ba304365b59d3f0fc2b61f7c44d8eed766a1c1aeb224f7d744c47db8b52bfdf002e1fd0637a212f5");
