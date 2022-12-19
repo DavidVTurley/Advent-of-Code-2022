@@ -28,4 +28,19 @@ public static class ExtraFunctions
         Int32 j = Array.IndexOf<T>(arr, src) - 1;
         return (-1 == j) ? arr[^1] : arr[j];
     }
+
+    public static Int32 Multiply(this IEnumerable<Int32> source)
+    {
+        if (source == null) throw new Exception("The array is Null");
+        Int32[] enumerable = source.ToArray();
+        if (!enumerable.Any()) throw new Exception("The array is empty");
+
+        Int32 sum = enumerable[0];
+        for (Int32 i = 1; i < enumerable.Count(); i++)
+        {
+            sum *= enumerable[i];
+        }
+
+        return sum;
+    }
 }
