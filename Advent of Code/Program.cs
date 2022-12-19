@@ -12,7 +12,7 @@ HttpClient client = new HttpClient()
 
 
 
-IDay day = new Day5();
+IDay day = new Day8();
 await day.Setup(client);
 
 day.Challenge1();
