@@ -1,4 +1,6 @@
-﻿namespace Advent_of_Code.Days;
+namespace Advent_of_Code.Days;
+
+using Extras;
 
 public class Day9 : IDay
 {

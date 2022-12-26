@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day4 : IDay
 {

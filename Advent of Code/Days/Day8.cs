@@ -1,9 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Data;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using static Advent_of_Code.Days.Day8;
+﻿using System.Text;
 
 namespace Advent_of_Code.Days;
 

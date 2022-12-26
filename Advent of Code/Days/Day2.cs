@@ -1,7 +1,4 @@
-﻿using System.IO.Pipes;
-using System.Reflection.Metadata.Ecma335;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day2 : IDay
 {

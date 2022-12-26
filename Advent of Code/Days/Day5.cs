@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
+﻿using System.Text;
 
 namespace Advent_of_Code.Days;
 

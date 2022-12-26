@@ -1,8 +1,4 @@
-﻿using System.Security.Principal;
-using System.Text;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day6 : IDay
 {

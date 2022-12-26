@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
-using System.Xml.Linq;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day7 : IDay
 {

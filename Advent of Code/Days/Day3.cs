@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day3 : IDay
 {

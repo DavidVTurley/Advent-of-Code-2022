@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using System;
-
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 public class Day1 : IDay
 {
