@@ -1,39 +1,9 @@
-namespace Advent_of_Code.Days;
+﻿namespace Advent_of_Code.Days;
 
 using Extras;
 
 public class Day9 : IDay
 {
-    internal record struct Vec2(Int32 X, Int32 Y)
-    {
-        public Int32 X { get; set; } = X;
-        public Int32 Y { get; set; } = Y;
-
-        public void Move(Char direction)
-        {
-            switch (direction)
-            {
-                case 'D':
-                    Y--;
-                    break;
-                case 'U':
-                    Y++;
-                    break;
-                case 'L':
-                    X--;
-                    break;
-                case 'R':
-                    X++;
-                    break;
-            }
-        }
-
-        public Vec2 DirectionToVec2(Vec2 toVec2)
-        {
-            return new Vec2(toVec2.X - X, toVec2.Y - Y);
-        }
-    }
-
     public Task Setup(HttpClient client)
     {
         Input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9).Result.Split('\n', StringSplitOptions.RemoveEmptyEntries);
@@ -47,379 +17,384 @@ public class Day9 : IDay
 
     public void Challenge1()
     {
-        Dictionary<Vec2, Int32> positionsVisited = new() { { new Vec2(0, 0), 1 } };
-
-        Vec2 rope = new Vec2(0, 0);
-        Vec2 tail = new Vec2(0, 0);
-
-        foreach (String s in Input)
+        List<Vec2> knotList = new List<Vec2>()
         {
-            Int32 count = Int32.Parse(s.Substring(2));
-            for (Int32 i = 0; i < count; i++)
+            new Vec2(0, 0),
+            new Vec2(0, 0),
+        };
+
+        Dictionary<Vec2, Int32> positionsVisited = SimulateRope(Input, knotList);
+        
+    }
+
+    private static Dictionary<Vec2, Int32> SimulateRope(IEnumerable<String> commands, IList<Vec2> knotList)
+    {
+        Decimal maxX = 0;
+        Decimal maxY = 0;
+        Dictionary<Vec2, Int32> positionsVisited = new() { { new Vec2(0, 0), 1 } };
+        foreach (String command in commands)
+        {
+            for (Int32 i = 0; i < Int32.Parse(command.Substring(2)); i++)
             {
-                rope.Move(s[0]);
-                Vec2 direction = tail.DirectionToVec2(rope);
-
-                Boolean tailMoved = false;
-                switch (s[0])
+                Direction direction = (Direction)command[0];
+                knotList[0] += Vec2.GetDirectionVector(direction);
+                
+                for (Int32 knotIndex = 1; knotIndex < knotList.Count; knotIndex++)
                 {
-                    case 'D' when direction.Y == -2:
-                        tailMoved = true;
-                        tail.Move(s[0]);
-                        if (direction.X == 0) break;
-                        tail.X += direction.X;
-                        break;
-                    case 'U' when direction.Y == 2:
-                        tailMoved = true;
-                        tail.Move(s[0]);
-                        if (direction.X == 0) break;
-                        tail.X += direction.X;
-                        break;
-                    case 'L' when direction.X == -2:
-                        tailMoved = true;
-                        tail.Move(s[0]);
-                        if (direction.Y == 0) break;
-                        tail.Y += direction.Y;
-                        break;
-                    case 'R' when direction.X == 2:
-                        tailMoved = true;
-                        tail.Move(s[0]);
-                        if (direction.Y == 0) break;
-                        tail.Y += direction.Y;
-                        break;
+                    Boolean tailMoved = knotList[knotIndex].TargetWithinNUnits(knotList[knotIndex-1], 1);
+                    if (!tailMoved) continue;
+
+                    Vec2 vecToTarget = knotList[knotIndex].GetVectorToTarget(knotList[knotIndex-1]).Normalize();
+
+                    if (vecToTarget.X is 1 or -1)
+                    {
+                        Vec2 add = new Vec2(vecToTarget.X, 0);
+                        if (vecToTarget.Y != 0)
+                            add.Y += vecToTarget.Y > 0 ? Math.Ceiling(vecToTarget.Y) : Math.Floor(vecToTarget.Y);
+                        knotList[knotIndex] += add;
+                    }
+                    else if (vecToTarget.Y is 1 or -1)
+                    {
+                        Vec2 add = new Vec2(0, vecToTarget.Y);
+                        if (vecToTarget.X != 0)
+                            add.X += vecToTarget.X > 0 ? Math.Ceiling(vecToTarget.X) : Math.Floor(vecToTarget.X);
+                        knotList[knotIndex] += add;
+                    }
                 }
-
-                if (!tailMoved) continue;
-
-                if (!positionsVisited.TryAdd(tail, 1))
+                if (!positionsVisited.TryAdd(knotList[^1], 1))
                 {
-                    positionsVisited[tail]++;
+                    positionsVisited[knotList[^1]]++;
                 }
             }
         }
+
+        return positionsVisited;
     }
 
     public void Challenge2()
     {
-        throw new NotImplementedException();
+        //Input = "R 5\nU 8\nL 8\nD 3\nR 17\nD 10\nL 25\nU 20".Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+        List<Vec2> knotList = new List<Vec2>(10);
+        for (Int32 i = 0; i < 10; i++)
+        {
+            knotList.Add(new Vec2(0, 0));
+        }
+
+        Dictionary<Vec2, Int32> positionVisited = SimulateRope(Input, knotList);
+        
     }
 }
 
 
-//public class Day9 : IDay
-//{
-//    public enum Direction
-//    {
-//        Down = (Int32)'D',
-//        Left = (Int32)'L',
-//        Right = (Int32)'R',
-//        Up = (Int32)'U',
-//    }
 
-//    private List<(Direction direction, Int32 move)> steps = new();
+////public class Day9 : IDay
+////{
 
-//    public async Task Setup(HttpClient client)
-//    {
-//        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9);
+////    private List<(Direction direction, Int32 move)> steps = new();
 
-//        input = "R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2\n";
+////    public async Task Setup(HttpClient client)
+////    {
+////        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9);
 
-//        steps = new List<(Direction, Int32)>(input.Length / 4);
+////        input = "R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2\n";
+
+////        steps = new List<(Direction, Int32)>(input.Length / 4);
 
 
-//        foreach (String s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-//        {
-//            steps.Add((
-//                    (Direction)s[0],
-//                    Int32.Parse(s[2].ToString(CultureInfo.InvariantCulture)))
-//                );
-//        }
+////        foreach (String s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))
+////        {
+////            steps.Add((
+////                    (Direction)s[0],
+////                    Int32.Parse(s[2].ToString(CultureInfo.InvariantCulture)))
+////                );
+////        }
 
-//    }
+////    }
 
-//    public void Challenge1()
-//    {
-//        Dictionary<Point, Int32> tailPositionsVisited = new()
-//        {
-//            {new Point(0,0), 1}
-//        }; ;
+////    public void Challenge1()
+////    {
+////        Dictionary<Point, Int32> tailPositionsVisited = new()
+////        {
+////            {new Point(0,0), 1}
+////        }; ;
 
-//        Rope rope = new Rope(0, 0);
-//        Rope tail = new Rope(0, 0);
+////        Rope rope = new Rope(0, 0);
+////        Rope tail = new Rope(0, 0);
 
-//        foreach ((Direction direction, Int32 move) in steps)
-//        {
-//            for (Int32 i = 0; i < move; i++)
-//            {
-//                rope.Move(direction);
-//                Point p = tail.FollowMove(direction, rope);
-//                if(p == tail.PreviousPoint) continue;
+////        foreach ((Direction direction, Int32 move) in steps)
+////        {
+////            for (Int32 i = 0; i < move; i++)
+////            {
+////                rope.Move(direction);
+////                Point p = tail.FollowMove(direction, rope);
+////                if(p == tail.PreviousPoint) continue;
 
-//                PaintRopeAndTail(rope, tail);
+////                PaintRopeAndTail(rope, tail);
 
-//                if (!tail.HasMoved) continue;
+////                if (!tail.HasMoved) continue;
 
-//                if (tailPositionsVisited.ContainsKey(p))
-//                {
-//                    tailPositionsVisited[p]++;
+////                if (tailPositionsVisited.ContainsKey(p))
+////                {
+////                    tailPositionsVisited[p]++;
 
-//                }
-//                else
-//                {
-//                    tailPositionsVisited.Add(p, 1);
-//                }
-//                tail.HasMoved = false;
-//            }
-//        }
+////                }
+////                else
+////                {
+////                    tailPositionsVisited.Add(p, 1);
+////                }
+////                tail.HasMoved = false;
+////            }
+////        }
 
-//        var s = tailPositionsVisited.Count;
+////        var s = tailPositionsVisited.Count;
 
-//        List<List<Boolean>> c = new List<List<Boolean>>().AddRange(new List<Boolean>[]);
-//        foreach (KeyValuePair<Point, Int32> keyValuePair in tailPositionsVisited)
-//        {
-//            ;
-//        }
-//    }
+////        List<List<Boolean>> c = new List<List<Boolean>>().AddRange(new List<Boolean>[]);
+////        foreach (KeyValuePair<Point, Int32> keyValuePair in tailPositionsVisited)
+////        {
+////            ;
+////        }
+////    }
 
-//    public void Challenge2()
-//    {
-//        throw new NotImplementedException();
-//    }
+////    public void Challenge2()
+////    {
+////        throw new NotImplementedException();
+////    }
 
-//    public void PaintRopeAndTail(Rope rope, Rope tail){
+////    public void PaintRopeAndTail(Rope rope, Rope tail){
 
 
 
-//         I know this is horribly inificient, but it's late and I want to go to bed.
+////         I know this is horribly inificient, but it's late and I want to go to bed.
 
 
-//        Int32 xOffset = tail.CurrentPoint.X - rope.CurrentPoint.X;
-//        Int32 yOffset = tail.CurrentPoint.Y - rope.CurrentPoint.Y;
+////        Int32 xOffset = tail.CurrentPoint.X - rope.CurrentPoint.X;
+////        Int32 yOffset = tail.CurrentPoint.Y - rope.CurrentPoint.Y;
 
-//        List<List<Char>> sa = new()
-//        {
-//            new List<Char>(3){'x', 'x', 'x'},
-//            new List<Char>(3){'x', 'S', 'x'},
-//            new List<Char>(3){'x', 'x', 'x'},
-//        };
+////        List<List<Char>> sa = new()
+////        {
+////            new List<Char>(3){'x', 'x', 'x'},
+////            new List<Char>(3){'x', 'S', 'x'},
+////            new List<Char>(3){'x', 'x', 'x'},
+////        };
 
-//        sa[yOffset + 1][xOffset + 1] = 'T';
+////        sa[yOffset + 1][xOffset + 1] = 'T';
 
-//        foreach (List<Char> chars in sa)
-//        {
-//            foreach (Char c in chars)
-//            {
-//                Console.Write(c);
-//            }
+////        foreach (List<Char> chars in sa)
+////        {
+////            foreach (Char c in chars)
+////            {
+////                Console.Write(c);
+////            }
 
-//            Console.WriteLine();
-//        }
+////            Console.WriteLine();
+////        }
 
-//        Console.WriteLine("---------------------------------------------");
+////        Console.WriteLine("---------------------------------------------");
 
-//    }
+////    }
 
-//     So turns out records are a thing
-//    public record Point
-//    {
-//        public Int32 X;
-//        public Int32 Y;
+////     So turns out records are a thing
+////    public record Point
+////    {
+////        public Int32 X;
+////        public Int32 Y;
 
-//        public Point(Int32 x, Int32 y)
-//        {
-//            X = x;
-//            Y = y;
-//        }
-
-
-
-//        public static Boolean operator ==(Point a, Point b)
-//        {
-//            return a.X == b.X && a.Y == b.Y;
-//        }
-//        public static Boolean operator !=(Point a, Point b)
-//        {
-//            return !(a == b);
-//        }
-
-//        public override Boolean Equals(Object? obj)
-//        {
-//            return obj is Point other && Equals(other);
-//        }
-
-//        public Boolean Equals(Point other)
-//        {
-//            return X == other.X && Y == other.Y;
-//        }
-
-//        public override Int32 GetHashCode()
-//        {
-//            return HashCode.Combine(X, Y);
-//        }
-
-//        public override String ToString()
-//        {
-//            return $"X:{X}, Y:{Y}";
-//        }
-
-//        public Object Clone()
-//        {
-//            return new Point(X, Y);
-//        }
-//    }
-
-//    public struct Rope
-//    {
-//        public Point PreviousPoint;
-//        public Point CurrentPoint;
-//        public Boolean HasMoved = false;
-
-//        public Rope(Int32 x, Int32 y)
-//        {
-//            PreviousPoint = new Point(x, y);
-//            CurrentPoint = new Point(x, y);
-//        }
+////        public Point(Int32 x, Int32 y)
+////        {
+////            X = x;
+////            Y = y;
+////        }
 
 
-//        / <summary>
-//        / Moves all directions indicated, and only after updates the previous Point
-//        / </summary>
-//        / <param name="directions"></param>
-//        / <returns></returns>
-//        public Point Move(Direction[] directions)
-//        {
-//            Point p = (Point) CurrentPoint.Clone();
 
-//            foreach (Direction direction in directions)
-//            {
-//                Move(direction);
-//            }
+////        public static Boolean operator ==(Point a, Point b)
+////        {
+////            return a.X == b.X && a.Y == b.Y;
+////        }
+////        public static Boolean operator !=(Point a, Point b)
+////        {
+////            return !(a == b);
+////        }
 
-//            PreviousPoint = p;
+////        public override Boolean Equals(Object? obj)
+////        {
+////            return obj is Point other && Equals(other);
+////        }
 
-//            return CurrentPoint;
-//        }
-//        public Point Move(Direction direction)
-//        {
-//            PreviousPoint = (Point) CurrentPoint;
-//            switch (direction)
-//            {
-//                case Direction.Down:
-//                    CurrentPoint.Y--;
-//                    break;
-//                case Direction.Left:
-//                    CurrentPoint.X--;
-//                    break;
-//                case Direction.Right:
-//                    CurrentPoint.X++;
-//                    break;
-//                case Direction.Up:
-//                    CurrentPoint.Y++;
-//                    break;
-//                default:
-//                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-//            }
+////        public Boolean Equals(Point other)
+////        {
+////            return X == other.X && Y == other.Y;
+////        }
 
-//            HasMoved = true;
-//            return CurrentPoint;
-//        }
+////        public override Int32 GetHashCode()
+////        {
+////            return HashCode.Combine(X, Y);
+////        }
 
-//        public Point Move(Point point)
-//        {
-//            PreviousPoint = (Point)CurrentPoint.Clone();
-//            CurrentPoint = (Point)point.Clone();
-//            HasMoved = true;
-//            return (Point)CurrentPoint.Clone();
-//        }
+////        public override String ToString()
+////        {
+////            return $"X:{X}, Y:{Y}";
+////        }
 
-//        public Point FollowMove(Direction direction, Rope toFollow)
-//        {
-//            if (CurrentPoint == toFollow.PreviousPoint) return CurrentPoint;
+////        public Object Clone()
+////        {
+////            return new Point(X, Y);
+////        }
+////    }
 
-//            Int32 oppositeAxisMove = 0;
+////    public struct Rope
+////    {
+////        public Point PreviousPoint;
+////        public Point CurrentPoint;
+////        public Boolean HasMoved = false;
 
-//            switch (direction)
-//            {
-//                case Direction.Down:
+////        public Rope(Int32 x, Int32 y)
+////        {
+////            PreviousPoint = new Point(x, y);
+////            CurrentPoint = new Point(x, y);
+////        }
 
-//                    if (toFollow.CurrentPoint.Y - CurrentPoint.Y != -2) return CurrentPoint;
 
-//                    oppositeAxisMove = toFollow.CurrentPoint.X - CurrentPoint.X;
-//                    switch (oppositeAxisMove)
-//                    {
-//                        case > 0:
-//                            Move(new[] { Direction.Right, Direction.Down });
-//                            break;
-//                        case 0:
-//                            Move(Direction.Down);
-//                            break;
-//                        case < 0:
-//                            Move(new[] { Direction.Left, Direction.Down });
-//                            break;
-//                    }
+////        / <summary>
+////        / Moves all directions indicated, and only after updates the previous Point
+////        / </summary>
+////        / <param name="directions"></param>
+////        / <returns></returns>
+////        public Point Move(Direction[] directions)
+////        {
+////            Point p = (Point) CurrentPoint.Clone();
 
-//                    break;
-//                case Direction.Up:
-//                    if (toFollow.CurrentPoint.Y - CurrentPoint.Y != 2) return CurrentPoint;
+////            foreach (Direction direction in directions)
+////            {
+////                Move(direction);
+////            }
 
-//                    oppositeAxisMove = toFollow.CurrentPoint.X - CurrentPoint.X;
-//                    switch (oppositeAxisMove)
-//                    {
-//                        case > 0:
-//                            Move(new[] { Direction.Right, Direction.Up });
-//                            break;
-//                        case 0:
-//                            Move(Direction.Up);
-//                            break;
-//                        case < 0:
-//                            Move(new[] { Direction.Left, Direction.Up });
-//                            break;
-//                    }
+////            PreviousPoint = p;
 
-//                    break;
+////            return CurrentPoint;
+////        }
+////        public Point Move(Direction direction)
+////        {
+////            PreviousPoint = (Point) CurrentPoint;
+////            switch (direction)
+////            {
+////                case Direction.Down:
+////                    CurrentPoint.Y--;
+////                    break;
+////                case Direction.Left:
+////                    CurrentPoint.X--;
+////                    break;
+////                case Direction.Right:
+////                    CurrentPoint.X++;
+////                    break;
+////                case Direction.Up:
+////                    CurrentPoint.Y++;
+////                    break;
+////                default:
+////                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+////            }
 
-//                case Direction.Left:
-//                    if (toFollow.CurrentPoint.X - CurrentPoint.X != -2) return CurrentPoint;
+////            HasMoved = true;
+////            return CurrentPoint;
+////        }
 
-//                    oppositeAxisMove = toFollow.CurrentPoint.Y - CurrentPoint.Y;
-//                    switch (oppositeAxisMove)
-//                    {
-//                        case > 0:
-//                            Move(new[] { Direction.Left, Direction.Up });
-//                            break;
-//                        case 0:
-//                            Move(Direction.Left);
-//                            break;
-//                        case < 0:
-//                            Move(new[] { Direction.Left, Direction.Down });
-//                            break;
-//                    }
+////        public Point Move(Point point)
+////        {
+////            PreviousPoint = (Point)CurrentPoint.Clone();
+////            CurrentPoint = (Point)point.Clone();
+////            HasMoved = true;
+////            return (Point)CurrentPoint.Clone();
+////        }
 
-//                    break;
-//                case Direction.Right:
-//                    if (toFollow.CurrentPoint.X - CurrentPoint.X != 2) return CurrentPoint;
+////        public Point FollowMove(Direction direction, Rope toFollow)
+////        {
+////            if (CurrentPoint == toFollow.PreviousPoint) return CurrentPoint;
 
-//                    oppositeAxisMove = toFollow.CurrentPoint.Y - CurrentPoint.Y;
-//                    switch (oppositeAxisMove)
-//                    {
-//                        case 1:
-//                            Move(new[] { Direction.Right, Direction.Up });
-//                            break;
-//                        case 0:
-//                            Move(Direction.Right);
-//                            break;
-//                        case -1:
-//                            Move(new[] { Direction.Right, Direction.Down });
-//                            break;
-//                    }
+////            Int32 oppositeAxisMove = 0;
 
-//                    break;
-//                default:
-//                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-//            }
+////            switch (direction)
+////            {
+////                case Direction.Down:
 
-//            HasMoved = true;
-//            return CurrentPoint;
-//        }
-//    }
-//}
+////                    if (toFollow.CurrentPoint.Y - CurrentPoint.Y != -2) return CurrentPoint;
+
+////                    oppositeAxisMove = toFollow.CurrentPoint.X - CurrentPoint.X;
+////                    switch (oppositeAxisMove)
+////                    {
+////                        case > 0:
+////                            Move(new[] { Direction.Right, Direction.Down });
+////                            break;
+////                        case 0:
+////                            Move(Direction.Down);
+////                            break;
+////                        case < 0:
+////                            Move(new[] { Direction.Left, Direction.Down });
+////                            break;
+////                    }
+
+////                    break;
+////                case Direction.Up:
+////                    if (toFollow.CurrentPoint.Y - CurrentPoint.Y != 2) return CurrentPoint;
+
+////                    oppositeAxisMove = toFollow.CurrentPoint.X - CurrentPoint.X;
+////                    switch (oppositeAxisMove)
+////                    {
+////                        case > 0:
+////                            Move(new[] { Direction.Right, Direction.Up });
+////                            break;
+////                        case 0:
+////                            Move(Direction.Up);
+////                            break;
+////                        case < 0:
+////                            Move(new[] { Direction.Left, Direction.Up });
+////                            break;
+////                    }
+
+////                    break;
+
+////                case Direction.Left:
+////                    if (toFollow.CurrentPoint.X - CurrentPoint.X != -2) return CurrentPoint;
+
+////                    oppositeAxisMove = toFollow.CurrentPoint.Y - CurrentPoint.Y;
+////                    switch (oppositeAxisMove)
+////                    {
+////                        case > 0:
+////                            Move(new[] { Direction.Left, Direction.Up });
+////                            break;
+////                        case 0:
+////                            Move(Direction.Left);
+////                            break;
+////                        case < 0:
+////                            Move(new[] { Direction.Left, Direction.Down });
+////                            break;
+////                    }
+
+////                    break;
+////                case Direction.Right:
+////                    if (toFollow.CurrentPoint.X - CurrentPoint.X != 2) return CurrentPoint;
+
+////                    oppositeAxisMove = toFollow.CurrentPoint.Y - CurrentPoint.Y;
+////                    switch (oppositeAxisMove)
+////                    {
+////                        case 1:
+////                            Move(new[] { Direction.Right, Direction.Up });
+////                            break;
+////                        case 0:
+////                            Move(Direction.Right);
+////                            break;
+////                        case -1:
+////                            Move(new[] { Direction.Right, Direction.Down });
+////                            break;
+////                    }
+
+////                    break;
+////                default:
+////                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
+////            }
+
+////            HasMoved = true;
+////            return CurrentPoint;
+////        }
+////    }
+////}
