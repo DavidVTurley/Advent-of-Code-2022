@@ -4,13 +4,11 @@ using Extras;
 
 public class Day9 : IDay
 {
-    public Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        Input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9).Result.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        Input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9).Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
         //Input = "R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2\n".Split('\n', StringSplitOptions.RemoveEmptyEntries);
-
-        return Task.CompletedTask;
     }
 
     public String[] Input = null!;

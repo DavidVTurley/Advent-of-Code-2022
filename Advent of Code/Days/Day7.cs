@@ -2,9 +2,9 @@
 
 public class Day7 : IDay
 {
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 7);
+        String input =  ExtraFunctions.MakeAdventOfCodeInputRequest(client, 7);
         input = $"$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k";
         commands = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
         _node = CreateNodeTree();

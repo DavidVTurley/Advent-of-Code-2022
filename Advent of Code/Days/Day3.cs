@@ -2,9 +2,9 @@
 
 public class Day3 : IDay
 {
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 3);
+        String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 3);
         //input = "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw";
         _bags = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
 

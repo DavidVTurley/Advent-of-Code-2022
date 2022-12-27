@@ -4,9 +4,9 @@ namespace Advent_of_Code.Days;
 
 public class Day5 : IDay
 {
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 5);
+        String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 5);
         //input = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2";
         _crates = new Crates(input);
         _crates2 = new Crates(input);

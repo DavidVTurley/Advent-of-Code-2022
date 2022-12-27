@@ -2,9 +2,9 @@
 
 public class Day6 : IDay
 {
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 6);
+        String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 6);
         //input = "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw";
         DataStreams.AddRange(input.Split('\n', StringSplitOptions.RemoveEmptyEntries));
     }

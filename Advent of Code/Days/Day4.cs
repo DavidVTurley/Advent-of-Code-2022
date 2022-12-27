@@ -3,9 +3,9 @@
 public class Day4 : IDay
 {
     private (Int32 min1, Int32 max1, Int32 min2, Int32 max2) numbers = new();
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 4);
+        String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 4);
         //input = $"2-4,6-8\n2-3,4-5\n5-7,7-9\n2-8,3-7\n6-6,4-6\n2-6,4-8";
         String[] stringNums = input.Split('\n');
 

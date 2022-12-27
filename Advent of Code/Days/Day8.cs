@@ -4,9 +4,9 @@ namespace Advent_of_Code.Days;
 
 public class Day8 : IDay
 {
-    public async Task Setup(HttpClient client)
+    public void Setup(HttpClient client)
     {
-        String input = await ExtraFunctions.MakeAdventOfCodeInputRequest(client, 8);
+        String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 8);
         //input = "30373\n25512\n65332\n33549\n35390";
 
         foreach (String s in input.Split('\n', StringSplitOptions.RemoveEmptyEntries))

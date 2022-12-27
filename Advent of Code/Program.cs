@@ -10,8 +10,8 @@ HttpClient client = new HttpClient()
 };
 
 
-IDay day = new Day9();
-await day.Setup(client);
+IDay day = new Day10();
+day.Setup(client);
 
 day.Challenge1();
 day.Challenge2();
