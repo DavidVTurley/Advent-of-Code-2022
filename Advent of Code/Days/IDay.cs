@@ -2,7 +2,7 @@
 
 public interface IDay
 {
-    public void Setup(HttpClient client);
-    public void Challenge1();
-    public void Challenge2();
+    public Object Setup(HttpClient client);
+    public void Challenge1(Object input);
+    public void Challenge2(Object input);
 }

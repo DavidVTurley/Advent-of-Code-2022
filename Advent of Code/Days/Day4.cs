@@ -3,7 +3,7 @@
 public class Day4 : IDay
 {
     private (Int32 min1, Int32 max1, Int32 min2, Int32 max2) numbers = new();
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 4);
         //input = $"2-4,6-8\n2-3,4-5\n5-7,7-9\n2-8,3-7\n6-6,4-6\n2-6,4-8";
@@ -17,12 +17,12 @@ public class Day4 : IDay
             _numbers.Add(new(Int32.Parse(nums[0]), Int32.Parse(nums[1]), Int32.Parse(nums[2]), Int32.Parse(nums[3])));
         }
 
-
+        return _numbers;
     }
 
     private readonly List<(Int32 min1, Int32 max1, Int32 min2, Int32 max2)> _numbers = new();
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         Int32 count = 0;
         foreach ((Int32 min1, Int32 max1, Int32 min2, Int32 max2) in _numbers)
@@ -34,7 +34,7 @@ public class Day4 : IDay
         }
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         Int32 count = 0;
         foreach ((Int32 min1, Int32 max1, Int32 min2, Int32 max2) in _numbers)

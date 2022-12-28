@@ -4,7 +4,7 @@ public class Day2 : IDay
 {
     //https://adventofcode.com/2022/day/2#part2
 
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         //HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get,"2/input");
         //request.Headers.TryAddWithoutValidation("Cookie", "session=53616c7465645f5fbb1fcdcf1223961c690186431282a894ba304365b59d3f0fc2b61f7c44d8eed766a1c1aeb224f7d744c47db8b52bfdf002e1fd0637a212f5");
@@ -22,12 +22,14 @@ public class Day2 : IDay
                 (Signs)Char.ToUpper(turn[0]) - 64, 
                 (Signs)Char.ToUpper(turn[2]) - 87));
         });
+
+        return _turns;
     }
 
 
     private readonly List<(Signs opponent, Signs player)> _turns = new();
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         Int32 score = 0;
 
@@ -65,7 +67,7 @@ public class Day2 : IDay
         Console.WriteLine($"I scored {score} points!");
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         Int32 score = 0;
 

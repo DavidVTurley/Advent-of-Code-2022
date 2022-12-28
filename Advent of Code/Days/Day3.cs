@@ -2,7 +2,7 @@
 
 public class Day3 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 3);
         //input = "vJrwpWtwJgWrhcsFMMfFFhFp\njqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\nPmmdzqPrVvPwwTWBwg\nwMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\nttgJtRGJQctTZtZT\nCrZsJsPPZsGzwwsLwLmpwMDw";
@@ -18,11 +18,13 @@ public class Day3 : IDay
                 throw new Exception();
             }
         }
+
+        return _bags;
     }
 
     private List<String> _bags = new();
     private readonly List<(String compartment1, String compartment2)> _compartments = new();
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         Int32 count = 0;
         foreach ((String? compartment1, String? compartment2) in _compartments)
@@ -52,7 +54,7 @@ public class Day3 : IDay
         }
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         Int32 count = 0;
 

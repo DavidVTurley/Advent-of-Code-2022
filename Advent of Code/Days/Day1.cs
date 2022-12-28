@@ -2,7 +2,7 @@
 
 public class Day1 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         //using HttpRequestMessage request = new HttpRequestMessage(new HttpMethod("GET"), "1/input");
         //request.Headers.TryAddWithoutValidation("Cookie", "session=53616c7465645f5fbb1fcdcf1223961c690186431282a894ba304365b59d3f0fc2b61f7c44d8eed766a1c1aeb224f7d744c47db8b52bfdf002e1fd0637a212f5");
@@ -26,16 +26,17 @@ public class Day1 : IDay
         }
 
         _elves = _elves.OrderBy(elf => elf.TotalCalories).ToList();
+        return _elves;
     }
 
     private List<Elf> _elves = new List<Elf>();
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         Console.WriteLine($"Biggest elf has {_elves.Last().TotalCalories} calories and is the most.");
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         Int32 totalCaloriesSummed = _elves.TakeLast(3).Sum(elf => elf.TotalCalories);
         Console.WriteLine($"The top 3 elves by calories are carying {totalCaloriesSummed} calories.");

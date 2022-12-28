@@ -2,17 +2,19 @@
 
 public class Day7 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input =  ExtraFunctions.MakeAdventOfCodeInputRequest(client, 7);
         input = $"$ cd /\n$ ls\ndir a\n14848514 b.txt\n8504156 c.dat\ndir d\n$ cd a\n$ ls\ndir e\n29116 f\n2557 g\n62596 h.lst\n$ cd e\n$ ls\n584 i\n$ cd ..\n$ cd ..\n$ cd d\n$ ls\n4060174 j\n8033020 d.log\n5626152 d.ext\n7214296 k";
         commands = input.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
         _node = CreateNodeTree();
+
+        return commands;
     }
 
     private List<String> commands = new();
     private Node _node = new Node("/");
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         _node.PrintTree();
 
@@ -24,7 +26,7 @@ public class Day7 : IDay
         Console.WriteLine(s);
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         throw new NotImplementedException();
     }

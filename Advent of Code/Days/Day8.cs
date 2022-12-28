@@ -4,7 +4,7 @@ namespace Advent_of_Code.Days;
 
 public class Day8 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 8);
         //input = "30373\n25512\n65332\n33549\n35390";
@@ -41,6 +41,8 @@ public class Day8 : IDay
             Console.WriteLine(sb.ToString());
             sb.Clear();
         }
+
+        return Trees;
     }
 
     List<List<Tree>> Trees = new List<List<Tree>>();
@@ -77,14 +79,14 @@ public class Day8 : IDay
         }
     }
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         FindAllTreesVisible();
 
         Int32 count = CalculateTotalVisibleTrees(Trees);
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         Int32 score = FindHighestScenicTreeScore();
     }

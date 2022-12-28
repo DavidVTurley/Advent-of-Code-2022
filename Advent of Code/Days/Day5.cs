@@ -4,7 +4,7 @@ namespace Advent_of_Code.Days;
 
 public class Day5 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 5);
         //input = "    [D]    \n[N] [C]    \n[Z] [M] [P]\n 1   2   3 \n\nmove 1 from 2 to 1\nmove 3 from 1 to 3\nmove 2 from 2 to 1\nmove 1 from 1 to 2";
@@ -17,6 +17,8 @@ public class Day5 : IDay
         {
             moves.Add(new(Int32.Parse(values[i]), Int32.Parse(values[i + 2]), Int32.Parse(values[i + 4])));
         }
+
+        return moves;
     }
 
     private Crates _crates;
@@ -24,7 +26,7 @@ public class Day5 : IDay
 
     private List<(Int32 move, Int32 from, Int32 to)> moves = new();
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         foreach ((Int32 move, Int32 from, Int32 to) in moves)
         {
@@ -34,7 +36,7 @@ public class Day5 : IDay
         Console.WriteLine($"The top crates are: {_crates.TopCrates()}");
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         foreach ((Int32 move, Int32 from, Int32 to) in moves)
         {

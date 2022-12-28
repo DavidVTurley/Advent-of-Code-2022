@@ -2,11 +2,13 @@
 
 public class Day6 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         String input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 6);
         //input = "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw";
         DataStreams.AddRange(input.Split('\n', StringSplitOptions.RemoveEmptyEntries));
+
+        return DataStreams;
     }
 
     public List<String> DataStreams { get; } = new();
@@ -119,7 +121,7 @@ public class Day6 : IDay
         return -1;
     }
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         Int32 count = 0;
         Int32 returnIndex = CheckSignal(DataStreams[0], 4);
@@ -129,7 +131,7 @@ public class Day6 : IDay
 
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         throw new NotImplementedException();
     }

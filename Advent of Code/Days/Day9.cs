@@ -4,16 +4,17 @@ using Extras;
 
 public class Day9 : IDay
 {
-    public void Setup(HttpClient client)
+    public Object Setup(HttpClient client)
     {
         Input = ExtraFunctions.MakeAdventOfCodeInputRequest(client, 9).Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
         //Input = "R 4\nU 4\nL 3\nD 1\nR 4\nD 1\nL 5\nR 2\n".Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        return Input;
     }
 
     public String[] Input = null!;
 
-    public void Challenge1()
+    public void Challenge1(Object input)
     {
         List<Vec2> knotList = new List<Vec2>()
         {
@@ -69,7 +70,7 @@ public class Day9 : IDay
         return positionsVisited;
     }
 
-    public void Challenge2()
+    public void Challenge2(Object input)
     {
         //Input = "R 5\nU 8\nL 8\nD 3\nR 17\nD 10\nL 25\nU 20".Split('\n', StringSplitOptions.RemoveEmptyEntries);
 
